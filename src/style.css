@@ -1,8 +1,18 @@
 @media (prefers-color-scheme: dark) {
-    html, body {
+    html,
+    body {
         background-color: black;
         margin: 0;
         padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    main {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
     }
 
     #game {
@@ -12,35 +22,25 @@
         transform: translate(-50%, -50%);
     }
 
-    .excalibur-scale {
-        transform-origin: 0 0;
-        transform: scale(var(--pixel-conversion), var(--pixel-conversion));
-    }
-
     .menu {
         position: absolute;
+        left: var(--game-origin-x, 0px);
+        top: var(--game-origin-y, 0px);
+        width: 800px;
+        transform-origin: 0 0;
+        transform: scale(
+            var(--pixel-conversion, 1),
+            var(--pixel-conversion, 1)
+        );
         display: flex;
-        flex-direction: column;
-        padding: 5px;
-        width: 100%;
+        justify-content: space-between;
+        padding: 20px;
         color: #333;
+        box-sizing: border-box;
+        pointer-events: none;
     }
 
     .hide {
         display: none;
-    }
-
-    .show {
-        display: block;
-    }
-
-    #hp-count {
-        top: 30px;
-        left: 30px;
-    }
-
-    #destroyed-asteroids {
-        top: 30px;
-        right: 30px;
     }
 }

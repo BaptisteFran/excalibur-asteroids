@@ -5,8 +5,19 @@ export const calculateExPixelConversion = (screen: ex.Screen) => {
   const origin = screen.worldToPageCoordinates(Vector.Zero);
   const singlePixel = screen.worldToPageCoordinates(vec(1, 0)).sub(origin);
   const pixelConversion = singlePixel.x;
-  document.documentElement.style.setProperty('--pixel-conversion', pixelConversion.toString());
-}
+  document.documentElement.style.setProperty(
+    "--pixel-conversion",
+    pixelConversion.toString(),
+  );
+  document.documentElement.style.setProperty(
+    "--game-origin-x",
+    `${origin.x}px`,
+  );
+  document.documentElement.style.setProperty(
+    "--game-origin-y",
+    `${origin.y}px`,
+  );
+};
 
 export class Menu {
   rootElement: HTMLElement;
@@ -24,15 +35,13 @@ export class Menu {
     } else {
       throw Error("Could not initialize UI");
     }
-  };
+  }
 
   show() {
     this.rootElement.classList.remove("hide");
-    this.rootElement.classList.add("show");
   }
 
   hide() {
-    this.rootElement.classList.remove("show");
     this.rootElement.classList.add("hide");
   }
 }
