@@ -18,9 +18,10 @@ export class Laser extends Actor {
     });
   }
   entityType = "laser";
+  projectile_speed = 200;
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
-    this.pos.y -= 1.5;
+    this.vel.y = -1 * this.projectile_speed;
 
     if (this.pos.y < 0) {
       this.kill();

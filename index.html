@@ -2,12 +2,18 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" href="favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./src/style.css" />
         <title>JibeStudio's Asteroids</title>
     </head>
     <body>
+        <main>
+            <canvas id="game"></canvas>
+            <div id="menu" class="menu excalibur-scale show">
+                <p id="hp-count">0</p>
+                <p id="destroyed-asteroids">0</p>
+            </div>
+        </main>
         <script type="module" src="./src/main.ts"></script>
     </body>
 </html>

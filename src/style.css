@@ -1,5 +1,46 @@
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: black;
-  }
+    html, body {
+        background-color: black;
+        margin: 0;
+        padding: 0;
+    }
+
+    #game {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .excalibur-scale {
+        transform-origin: 0 0;
+        transform: scale(var(--pixel-conversion), var(--pixel-conversion));
+    }
+
+    .menu {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        width: 100%;
+        color: #333;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+
+    #hp-count {
+        top: 30px;
+        left: 30px;
+    }
+
+    #destroyed-asteroids {
+        top: 30px;
+        right: 30px;
+    }
 }

@@ -1,14 +1,16 @@
 import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
 import { loader } from "./resources";
 import { MyLevel } from "./level";
+import { calculateExPixelConversion, Menu } from "./ui/ui";
 
 // Goal is to keep main.ts small and just enough to configure the engine
 
 const game = new Engine({
+  canvasElementId: "game",
   width: 800, // Logical width and height in game pixels
   height: 600,
-  displayMode: DisplayMode.FitScreenAndFill, // Display mode tells excalibur how to fill the window
-  pixelArt: false, // pixelArt will turn on the correct settings to render pixel art without jaggies or shimmering artifacts
+  displayMode: DisplayMode.FitScreen, // Display mode tells excalibur how to fill the window
+  pixelArt: true, // pixelArt will turn on the correct settings to render pixel art without jaggies or shimmering artifacts
   scenes: {
     start: MyLevel,
   },
@@ -19,17 +21,14 @@ const game = new Engine({
   // fixedUpdateTimestep: 16 // Turn on fixed update timestep when consistent physic simulation is important
 });
 
+game.screen.events.on('resize', () => calculateExPixelConversion(game.screen));
+
 game
   .start("start", {
     // name of the start scene 'start'
     loader, // Optional loader (but needed for loading images/sounds)
-    inTransition: new FadeInOut({
-      // Optional in transition
-      duration: 1000,
-      direction: "in",
-      color: Color.ExcaliburBlue,
-    }),
   })
   .then(() => {
-    // Do something after the game starts
+    calculateExPixelConversion(game.screen);
+    const menu = new Menu(game.currentScene);
   });
