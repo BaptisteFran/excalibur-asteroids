@@ -50,6 +50,10 @@ export class MyLevel extends Scene {
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
     // Called after everything updates in the scene
+    this.on("playerdied", () => {
+      console.log("player died");
+      this.pauseScene();
+    });
   }
 
   override onPreDraw(ctx: ExcaliburGraphicsContext, elapsedMs: number): void {

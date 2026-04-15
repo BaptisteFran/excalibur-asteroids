@@ -26,6 +26,11 @@ import { Laser } from "./entities/laser";
 // actor.pointer
 
 export class Player extends Actor {
+  hp: number = 1;
+  canShoot: boolean = true;
+  isAlive: boolean = true;
+  speed: number = 200;
+  entityType: string = "player";
   constructor() {
     super({
       // Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
@@ -40,9 +45,6 @@ export class Player extends Actor {
       collisionType: CollisionType.Active, // Collision Type Active means this participates in collisions read more https://excaliburjs.com/docs/collisiontypes
     });
   }
-  isAlive = true;
-  canShoot = true;
-  speed = 200; 
 
   override onInitialize() {
     // Generally recommended to stick logic in the "On initialize"
@@ -75,7 +77,6 @@ export class Player extends Actor {
       // if (true) {
       //   evt.cancel();
       // }
-      console.log("You clicked the actor @", evt.worldPos.toString());
     });
   }
 
@@ -121,8 +122,13 @@ export class Player extends Actor {
   ): void {
     // Called when a pair of objects are in contact
     if (other.owner.entityType && other.owner.entityType === "asteroid") {
-      this.kill();
-      this.isAlive = false;
+      this.hp -= 1;
+      this.scene.emit("playerhit", { hp: this.hp });
+      if (this.hp <= 0) {
+        this.scene.emit("playerdied");
+        this.kill();
+        this.isAlive = false;
+      }
     }
   }
 

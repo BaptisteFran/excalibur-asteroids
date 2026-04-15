@@ -43,6 +43,11 @@ export class Asteroid extends Actor {
     contact: CollisionContact,
   ): void {
     if (other.owner.entityType && other.owner.entityType === "laser") {
+      this.scene.emit("asteroiddestroyed");
+      this.kill();
+    }
+
+    if (other.owner.entityType && other.owner.entityType === "player") {
       this.kill();
     }
   }

@@ -1,4 +1,4 @@
-import { Scene, vec, Vector } from "excalibur";
+import { Actor, Scene, vec, Vector } from "excalibur";
 
 // CSS scale elements to match excalibur game canvas
 export const calculateExPixelConversion = (screen: ex.Screen) => {
@@ -23,10 +23,13 @@ export class Menu {
   rootElement: HTMLElement;
   destroyedAsteroids: HTMLElement;
   hpCount: HTMLElement;
+  player: Actor;
+  score: number = 0;
   constructor(public scene: Scene) {
     const rootElement = document.getElementById("menu");
     const destroyedAsteroids = document.getElementById("destroyed-asteroids");
     const hpCount = document.getElementById("hp-count");
+    this.score = Number(localStorage.getItem("score"));
 
     if (rootElement && destroyedAsteroids && hpCount) {
       this.rootElement = rootElement;
@@ -34,6 +37,33 @@ export class Menu {
       this.hpCount = hpCount;
     } else {
       throw Error("Could not initialize UI");
+    }
+
+    this.destroyedAsteroids.textContent = "Score: " + this.score.toString();
+    // Set hp to 10 at ui initialization
+    this.updateHp();
+
+    this.scene.on("asteroiddestroyed", () => {
+      this.updateScore();
+      this.destroyedAsteroids.textContent = "Score: " + this.score.toString();
+    });
+
+    this.scene.on("playerhit", (evt: any) => {
+      this.updateHp();
+      this.hpCount.textContent = "HP : " + evt.hp;
+    });
+  }
+
+  updateHp() {
+    if (this.scene.actors[0].name === "Player") {
+      this.hpCount.textContent = "HP: " + this.scene.actors[0].hp;
+    }
+  }
+
+  updateScore() {
+    this.score += 1;
+    if (this.score > Number(localStorage.getItem("score"))) {
+      localStorage.setItem("score", this.score.toString());
     }
   }
 
