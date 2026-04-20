@@ -26,3 +26,7 @@ I, of course, asked questions on the discord server, where people were really re
 Thanks to everyone who helped me with that.
 
 All the assets are made by me (of course, it's really basic), and anyone is free to use them in their project.
+
+Music and sounds are from opengameart.org, and all CC-0
+- https://opengameart.org/content/50-cc0-retro-synth-sfx
+- https://opengameart.org/content/loading-screen-loop
