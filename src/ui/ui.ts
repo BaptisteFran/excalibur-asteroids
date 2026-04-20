@@ -64,9 +64,11 @@ export class Menu {
   }
 
   updateScore() {
-    if (this.score > Number(localStorage.getItem("score"))) {
+    this.score += 1;
+    const highestScore = Number(localStorage.getItem("score") || 0);
+    if (this.score > highestScore) {
       localStorage.setItem("score", this.score.toString());
-      this.score += 1;
+      this.destroyedAsteroids.textContent = "Score: " + this.score;
     }
   }
 

@@ -8,6 +8,7 @@ import {
 } from "excalibur";
 import { Resources } from "../resources";
 import { TypedEntity } from "./entity-type";
+import { MyLevel } from "../level";
 
 export class Asteroid extends Actor {
   destroyed_sound = Resources.AsteroidDestroyedSound;
@@ -51,7 +52,7 @@ export class Asteroid extends Actor {
       (owner as TypedEntity).entityType === "laser"
     ) {
       this.destroyed_sound.play();
-      this.scene?.emit("asteroiddestroyed");
+      (this.scene as MyLevel).emit("asteroiddestroyed");
       this.kill();
     }
 
