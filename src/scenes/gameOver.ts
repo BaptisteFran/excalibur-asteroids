@@ -1,4 +1,12 @@
-import { Color, Engine, Font, Label, Scene, vec } from "excalibur";
+import {
+  Color,
+  DefaultLoader,
+  Engine,
+  Font,
+  Label,
+  Scene,
+  vec,
+} from "excalibur";
 import { ReplayButton } from "../ui/components/replayBtn";
 
 export class GameOver extends Scene {
@@ -19,5 +27,9 @@ export class GameOver extends Scene {
 
     this.add(title);
     this.add(replayBtn);
+  }
+
+  override onPreLoad(loader: DefaultLoader): void {
+    this.backgroundColor = Color.White;
   }
 }
