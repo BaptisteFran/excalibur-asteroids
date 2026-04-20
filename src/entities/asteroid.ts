@@ -7,8 +7,10 @@ import {
   vec,
 } from "excalibur";
 import { Resources } from "../resources";
+import { TypedEntity } from "./entity-type";
 
 export class Asteroid extends Actor {
+  destroyed_sound = Resources.AsteroidDestroyedSound;
   constructor() {
     super({
       pos: vec(0, 0),
@@ -42,12 +44,22 @@ export class Asteroid extends Actor {
     side: Side,
     contact: CollisionContact,
   ): void {
-    if (other.owner.entityType && other.owner.entityType === "laser") {
-      this.scene.emit("asteroiddestroyed");
+    const owner = other.owner;
+    if (
+      owner &&
+      "entityType" in owner &&
+      (owner as TypedEntity).entityType === "laser"
+    ) {
+      this.destroyed_sound.play();
+      this.scene?.emit("asteroiddestroyed");
       this.kill();
     }
 
-    if (other.owner.entityType && other.owner.entityType === "player") {
+    if (
+      owner &&
+      "entityType" in owner &&
+      (owner as TypedEntity).entityType === "player"
+    ) {
       this.kill();
     }
   }

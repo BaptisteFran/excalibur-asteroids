@@ -1,7 +1,8 @@
-import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
+import { DisplayMode, Engine } from "excalibur";
 import { loader } from "./resources";
 import { MyLevel } from "./level";
-import { calculateExPixelConversion, Menu } from "./ui/ui";
+import { calculateExPixelConversion } from "./ui/ui";
+import { GameOver } from "./scenes/gameOver";
 
 // Goal is to keep main.ts small and just enough to configure the engine
 
@@ -13,6 +14,7 @@ const game = new Engine({
   pixelArt: true, // pixelArt will turn on the correct settings to render pixel art without jaggies or shimmering artifacts
   scenes: {
     start: MyLevel,
+    gameOver: GameOver,
   },
   // physics: {
   //   solver: SolverStrategy.Realistic,
@@ -30,5 +32,4 @@ game
   })
   .then(() => {
     calculateExPixelConversion(game.screen);
-    const menu = new Menu(game.currentScene);
   });

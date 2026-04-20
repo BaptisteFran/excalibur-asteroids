@@ -7,6 +7,7 @@ import {
   Side,
   Vector,
 } from "excalibur";
+import { TypedEntity } from "./entity-type";
 
 export class Laser extends Actor {
   constructor(pos: Vector) {
@@ -34,7 +35,12 @@ export class Laser extends Actor {
     side: Side,
     contact: CollisionContact,
   ): void {
-    if (other.owner.entityType && other.owner.entityType === "asteroid") {
+    const owner = other.owner;
+    if (
+      other &&
+      "entityType" in owner &&
+      (owner as TypedEntity).entityType === "asteroid"
+    ) {
       this.kill();
     }
   }

@@ -7,15 +7,23 @@ import {
   Color,
   Timer,
 } from "excalibur";
-import { Player } from "./player";
 import { Asteroid } from "./entities/asteroid";
+import { Menu } from "./ui/ui";
+import { Resources } from "./resources";
+import { Player } from "./player";
 
 export class MyLevel extends Scene {
+  menu!: Menu;
+  player!: Player;
+  music = Resources.MusicBg;
+  constructor() {
+    super();
+  }
   override onInitialize(engine: Engine): void {
     // Scene.onInitialize is where we recommend you perform the composition for your game
-    const player = new Player();
-    this.add(player); // Actors need to be added to a scene to be drawn
-
+    this.menu = new Menu(this);
+    this.music.loop = true;
+    this.music.play();
     const timer = new Timer({
       action: () => {
         this.add(new Asteroid());
@@ -26,6 +34,10 @@ export class MyLevel extends Scene {
 
     this.add(timer);
     timer.start();
+
+    this.on("playerdied", () => {
+      engine.goToScene("gameOver");
+    });
   }
 
   override onPreLoad(loader: DefaultLoader): void {
@@ -37,6 +49,19 @@ export class MyLevel extends Scene {
   override onActivate(context: SceneActivationContext<unknown>): void {
     // Called when Excalibur transitions to this scene
     // Only 1 scene is active at a time
+
+    // Probably best to remove scene, recreate it and add it
+    // engine.remove("start");
+    // engine.add(new MyLevel());
+    // engine.goToScene("start");
+    this.actors.forEach((actor) => actor.kill());
+
+    this.player = new Player();
+    this.add(this.player);
+
+    this.player.hp = 5;
+
+    this.emit("playeradded");
   }
 
   override onDeactivate(context: SceneActivationContext): void {
@@ -50,10 +75,6 @@ export class MyLevel extends Scene {
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
     // Called after everything updates in the scene
-    this.on("playerdied", () => {
-      console.log("player died");
-      this.pauseScene();
-    });
   }
 
   override onPreDraw(ctx: ExcaliburGraphicsContext, elapsedMs: number): void {

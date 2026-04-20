@@ -1,9 +1,15 @@
-import { Color, ImageSource, Loader, vec } from "excalibur";
+import { Color, ImageSource, Loader, Sound, vec } from "excalibur";
 
 // It is convenient to put your resources in one place
 export const Resources = {
   Ship: new ImageSource("./images/ship.png"), // Vite public/ directory serves the root images
   Asteroid: new ImageSource("./images/asteroid.png"),
+  ReplayBtnBackground: new ImageSource("./images/replay-btn-bg.png"),
+  AsteroidDestroyedSound: new Sound("./sound/asteroid_destroyed.ogg"),
+  LazerSound: new Sound("./sound/lazer.ogg"),
+  MusicBg: new Sound("./sound/music.wav"),
+  PlayerDeath: new Sound("./sound/player_death.ogg"),
+  PlayerHit: new Sound("./sound/player_hit.ogg"),
 } as const; // the 'as const' is a neat typescript trick to get strong typing on your resources.
 // So when you type Resources.Sword -> ImageSource
 

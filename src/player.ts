@@ -12,6 +12,7 @@ import {
 } from "excalibur";
 import { Resources } from "./resources";
 import { Laser } from "./entities/laser";
+import { TypedEntity } from "./entities/entity-type";
 
 // Actors are the main unit of composition you'll likely use, anything that you want to draw and move around the screen
 // is likely built with an actor
@@ -31,6 +32,9 @@ export class Player extends Actor {
   isAlive: boolean = true;
   speed: number = 200;
   entityType: string = "player";
+  hurt_sound = Resources.PlayerHit;
+  death_sound = Resources.PlayerDeath;
+  lazer_sound = Resources.LazerSound;
   constructor() {
     super({
       // Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
@@ -54,6 +58,7 @@ export class Player extends Actor {
     // 2. You need excalibur to be initialized & started
     // 3. Deferring logic to run time instead of constructor time
     // 4. Lazy instantiation
+    this.isAlive = true;
     this.graphics.add(Resources.Ship.toSprite());
     const triangle = new PolygonCollider({
       points: [vec(-30, -30), vec(-30, 30), vec(30, 0)],
@@ -86,10 +91,19 @@ export class Player extends Actor {
       this.shoot(engine);
     }
 
-    this.vel.x =
-      (engine.input.keyboard.isHeld(Keys.D) -
-        engine.input.keyboard.isHeld(Keys.A)) *
-      this.speed;
+    if (this.isAlive) {
+      let direction =
+        (engine.input.keyboard.isHeld(Keys.D) ? 1 : 0) -
+        (engine.input.keyboard.isHeld(Keys.A) ? 1 : 0);
+
+      if (this.pos.x >= 800 && direction > 0) {
+        direction = 0;
+      } else if (this.pos.x <= 0 && direction < 0) {
+        direction = 0;
+      }
+
+      this.vel.x = direction * this.speed;
+    }
   }
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
@@ -120,14 +134,23 @@ export class Player extends Actor {
     side: Side,
     contact: CollisionContact,
   ): void {
+    const owner = other.owner;
     // Called when a pair of objects are in contact
-    if (other.owner.entityType && other.owner.entityType === "asteroid") {
+    if (
+      owner &&
+      "entityType" in owner &&
+      (owner as TypedEntity).entityType === "asteroid"
+    ) {
       this.hp -= 1;
-      this.scene.emit("playerhit", { hp: this.hp });
+      this.scene?.emit("playerhit", { hp: this.hp });
       if (this.hp <= 0) {
-        this.scene.emit("playerdied");
-        this.kill();
         this.isAlive = false;
+        this.death_sound.play().then(() => {
+          this.scene?.emit("playerdied");
+          this.kill();
+        });
+      } else {
+        this.hurt_sound.play();
       }
     }
   }
@@ -158,6 +181,7 @@ export class Player extends Actor {
 
       let laser = new Laser(vec(this.pos.x, this.pos.y - 30));
       engine.add(laser);
+      this.lazer_sound.play();
     }
   }
 }
